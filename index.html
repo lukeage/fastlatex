@@ -5,12 +5,30 @@
 	</head>
 	<body>
 		<gradio-lite>
-		import gradio as gr
+			import gradio as gr
+			
+			LATEX_EXAMPLE = """\\begin{align*}
+			S(\\omega) 
+			&= \\frac{\\alpha g^2}{\\omega^5} e^{[ -0.74\\bigl\\{\\frac{\\omega U_\\omega 19.5}{g}\\bigr\\}^{\\!-4}\\,]} \\\\
+			&= \\frac{\\alpha g^2}{\\omega^5} \\exp\\Bigl[ -0.74\\Bigl\\{\\frac{\\omega U_\\omega 19.5}{g}\\Bigr\}^{\\!-4}\,\\Bigr] 
+			\\end{align*}"""
+			
+			def detect_and_format(input_string):
+				input_string = input_string.strip()
+				if not input_string:
+					return ""
+				else:
+					return f"%%%{input_string}%%%"			
+			
 
-		def greet(name):
-			return "Hello, " + name + "!"
-
-		gr.Interface(greet, "textbox", "textbox").launch()
+			demo = gr.Blocks(title="assistant", css="footer {visibility: hidden}")
+			with demo:
+				with gr.Row(equal_height=True):
+					left = gr.Text(label="Latex", lines=20, value=LATEX_EXAMPLE)
+					right = gr.Markdown(label="Rendered Latex", latex_delimiters=[{ "left": "%%%", "right": "%%%", "display": True }])
+				left.change(detect_and_format,inputs=[left],outputs=[right])
+				left.focus(detect_and_format,inputs=[left],outputs=[right])
+			demo.launch()
 		</gradio-lite>
 	</body>
 </html>
