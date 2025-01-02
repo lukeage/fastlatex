@@ -1,3 +1,4 @@
 # fastlatex
 
-https://lukeage.github.com/fastlatex
+ https://lukeage.github.io/fastlatex/
+ 
